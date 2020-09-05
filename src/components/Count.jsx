@@ -1,47 +1,38 @@
+//该组件是Count的UI组件，该组件中不能使用任何redux相关的API
 import React, { Component } from 'react'
-import store from '../redux/store'
-import {incrementAction,decrementAction,incrementWaitAction} from '../redux/count_action'
 
 export default class Count extends Component {
 
 	increment = ()=>{
 		//1.获取用户选择的数字
 		const {selectedNumber} = this.refs
-		//通知redux + selectedNumber.value
-		store.dispatch(incrementAction(selectedNumber.value*1))
+		this.props.jia(selectedNumber.value*1)
 	}
 
 	decrement = ()=>{
 		//1.获取用户选择的数字
 		const {selectedNumber} = this.refs
-		//通知redux - selectedNumber.value
-		store.dispatch(decrementAction(selectedNumber.value*1))
+		this.props.jian(selectedNumber.value*1)
 	}
 
 	incrementIfodd = ()=>{
 			//1.获取用户选择的数字
 			const {selectedNumber} = this.refs
-			//2.获取原状态
-			const sum = store.getState()
-			if(sum % 2 !== 0){
-				//3.执行加
-				store.dispatch(incrementAction(selectedNumber.value*1))
-			}
+			this.props.jia(selectedNumber.value*1)
 	}
 	
 	incrementAsync = ()=>{
 		//1.获取用户选择的数字
 		const {selectedNumber} = this.refs
-		// setTimeout(()=>{
-			store.dispatch(incrementWaitAction(selectedNumber.value*1))
-		// },500)
+		this.props.jia(selectedNumber.value*1)
 	}
 
 	render() {
 		// const {sum} = this.state
+		console.log(this.props);
 		return (
 			<div>
-				<h1>当前求和为{store.getState()}</h1>
+				<h1>当前求和为：{this.props.sum}</h1>
 				<select ref="selectedNumber">
 					<option value="1">1</option>
 					<option value="2">2</option>
