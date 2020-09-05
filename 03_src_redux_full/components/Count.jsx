@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import store from '../redux/store'
-import {incrementAction,decrementAction,incrementWaitAction} from '../redux/count_action'
+import {incrementAction,decrementAction} from '../redux/count_action'
 
 export default class Count extends Component {
 
@@ -32,9 +32,9 @@ export default class Count extends Component {
 	incrementAsync = ()=>{
 		//1.获取用户选择的数字
 		const {selectedNumber} = this.refs
-		// setTimeout(()=>{
-			store.dispatch(incrementWaitAction(selectedNumber.value*1))
-		// },500)
+		setTimeout(()=>{
+			store.dispatch(incrementAction(selectedNumber.value*1))
+		},500)
 	}
 
 	render() {
