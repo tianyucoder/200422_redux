@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
 //UI组件
 class Person extends Component {
 	render() {
