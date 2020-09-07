@@ -1,6 +1,7 @@
 //该文件用于创建为Count组件服务的reducer
 //该reducer用于：1.初始化Count组件的状态 2.加工Count组件的状态
 
+//引入常量
 import {INCREMENT,DECREMENT} from '../constant'
 
 const initState = 0 //初始化状态

@@ -9,7 +9,12 @@ import personReducer from './reducers/person'
 //redux-thunk
 import thunk from 'redux-thunk'
 
-//组合多个reducer-----传入的这个对象，就是redux保存的总状态对象
+/* 
+	特别注意：
+		1.多个reducer要用combineReducers进行合并，变成一个总reducer
+		2.combineReducers传入的对象就是redux保存的【总状态对象】
+*/
+//组合多个reducer
 const reducer= combineReducers({
 	count:countReducer,
 	persons:personReducer

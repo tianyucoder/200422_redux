@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-//UI
+//UI组件
 class Person extends Component {
 	render() {
 		return (
@@ -22,6 +22,7 @@ class Person extends Component {
 		)
 	}
 }
+//创建并暴露一个容器组件
 export default connect(
 	state =>({rens:state.persons}),//映射状态
 	{}//映射操作状态的方法
