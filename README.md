@@ -76,3 +76,27 @@
 
 					//暴露容器组件
 					export default countContainer
+
+## antd样式的按需引入步骤：
+		1.安装：yarn add react-app-rewired customize-cra
+		2.修改package.json中的scripts
+				  "scripts": {
+							"start": "react-app-rewired start",
+							"build": "react-app-rewired build",
+							"test": "react-app-rewired test",
+							"eject": "react-scripts eject"
+						},
+		3.根目录下建立：config-overrides.js,内容如下：
+					const { override, fixBabelImports } = require('customize-cra');
+					module.exports = override(
+						fixBabelImports('import', {
+							libraryName: 'antd',
+							libraryDirectory: 'es',
+							style: 'css',
+						}),
+					);
+		4.安装：yarn add babel-plugin-import
+
+
+## antd自定义主题步骤：
+		1.安装：yarn add less less-loader
