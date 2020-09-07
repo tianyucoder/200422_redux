@@ -61,7 +61,7 @@ class Count extends Component {
 		4.connect是高阶函数，同时应用了函数柯里化技术
 */
 export default connect(
-	state => ({sum:state}),
+	state => ({sum:state.count}),
 	//第二个参数为对象（最终会被翻译成函数的形式）
 	{
 		jia:incrementAction,

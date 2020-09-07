@@ -17,3 +17,5 @@ export default function countReducer(preState=initState,action){
 				return preState
 		}
 }
+
+console.log('count');
