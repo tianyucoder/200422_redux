@@ -50,43 +50,113 @@
 									(1).UI组件：组件中不允许使用任何redux相关的API————只负责展示界面
 									(2).容器组件：组件中可以随意的使用任何redux相关的API————只负责与redux交互
 
-## 6.react-redux的使用方式
+## 6.react-redux的使用
 			(1).把原来的Count组件，删成UI组件
 			(2).创建容器组件：src/container/Count.jsx，代码如下：
-					//引入connect，用于创建容器组件
-					import {connect} from 'react-redux'
-					//引入UI组件
-					import CountUI from '../components/Count'
+						import CountUI from '../components/Count'
+						import {connect} from 'react-redux'
 
-					//fun1的返回值，就作为传递给UI的状态
-					function fun1(){
-						return {sum:999}
-					}
-
-					//fun2的返回值，就作为传递给UI的操作状态的方法
-					function fun2(){
-						return {
-							jia:(numer)=> alert(`我后期会通知redux帮你加${numer}的`),
-							jian:(numer)=> alert(`我后期会通知redux帮你减${numer}的`),
+						//映射状态为props
+						function mapStateToProps (state){
+							//由于props接收到的参数，都会收集成对象，所以demo1必须返回一个对象
+							return {count:state} //return的这个对象，最终会整合到UI组件的this.props对象
 						}
-					}
 
-					//创建一个容器组件
-					const countContainer = connect(fun1,fun2)(CountUI)
+						//映射操作状态的方法
+						function mapDispatchToProps(dispatch){
+							return {
+								increment:(number)=>{dispatch(incrementAction(number))},
+								decrement:(number)=>{dispatch(decrementAction(number))},
+								incrementWait:(number)=>{dispatch(incrementWaitAction(number))},
+							}
+						}
 
-					//暴露容器组件
-					export default countContainer
+						export default connect(mapStateToProps,mapDispatchToProps)(CountUI)
+			(3).UI组件中：
+								读状态：this.props.xxxxxx
+								操作状态：this.props.yyyyyyy(value)
 
-## antd样式的按需引入步骤：
-		1.安装：yarn add react-app-rewired customize-cra
-		2.修改package.json中的scripts
-				  "scripts": {
-							"start": "react-app-rewired start",
-							"build": "react-app-rewired build",
-							"test": "react-app-rewired test",
-							"eject": "react-scripts eject"
-						},
-		3.根目录下建立：config-overrides.js,内容如下：
+## 8.react-redux优化：
+				1.优化容器组件：
+						export default connect(
+						state => ({count:state}),
+						{
+							increment:incrementAction,
+							decrement:decrementAction,
+							incrementWait:incrementWaitAction,
+						}
+					)(CountUI)
+				2.优化index.js，使用Provider批量传递
+						<Provider store={store}>
+							<App/>
+						</Provider>
+
+## 9.整合容器组件与UI组件
+			一个组件要和redux打交道，需要做的是：
+					(1).引入connect
+					(2).引入用于支撑业务逻辑的action
+					(3).暴露connect(
+								(state)=>({xxxxx:state}),
+								{
+									xxxxx:xxxxxAction,
+								}
+							)(UI组件)的结果
+
+## 10.模块化编码
+		一、改成模块化标准：
+						1.创建文件与文件夹：
+								-redux
+										-actions
+												count.js ====>前身count_action.js
+										-reducers
+												count.js ====>前身count_reducer.js
+						2.“地毯式”搜索，改引入路径
+						3.重新启动，保证案例正常显示
+		二、添加Person
+						1.constant.js中配置 添加一个人的常量：ADD_PERSON
+						2.创建文件：
+								-redux
+											-actions
+													person.js ====> 内容模仿actions/count.js
+											-reducers
+													person.js ====> 内容模仿reducers/count.js
+						3.修改store.js
+									(1).引入combineReducers用于汇总所有reducer
+												import {combineReducers} from 'redux'
+									(2).汇总所有reducer
+												const allReducer = combineReducers({
+													he:countReducer,
+													rens:personReducer
+												}) 
+									(3).备注：combineReducers传入的对象就是总的状态对象
+									(4).修改容器组件：Count、Person中接收state的地方，取出想要的数据
+
+## 11.开发者工具的使用：
+		(1).安装依赖
+					yarn add redux-devtools-extension
+		(2).store中的配置	
+					import {composeWithDevTools} from 'redux-devtools-extension'
+					const store = createStore(reducer,composeWithDevTools(applyMiddleware(thunk)))
+				
+## 12.antd的基本使用
+		(1).安装antd：yarn add antd
+		(2).引入你要使用的组件
+					import {Input,Button} from 'antd'
+		(3).引入antd样式：
+					import 'antd/dist/antd.css'
+
+## 13.antd样式的按需引入
+		(1).删掉import 'antd/dist/antd.css'
+		(2).文档切换为3.x版本
+		(3).yarn add react-app-rewired customize-cra
+		(4).修改package.json
+				"scripts": {
+					"start": "react-app-rewired start",
+					"build": "react-app-rewired build",
+					"test": "react-app-rewired test",
+					"eject": "react-scripts eject"
+				},
+		(5).建立config-overrides.js
 					const { override, fixBabelImports } = require('customize-cra');
 					module.exports = override(
 						fixBabelImports('import', {
@@ -95,8 +165,24 @@
 							style: 'css',
 						}),
 					);
-		4.安装：yarn add babel-plugin-import
+		(6).安装：yarn add babel-plugin-import
 
 
-## antd自定义主题步骤：
-		1.安装：yarn add less less-loader
+## 14.antd自定义主题颜色:
+		观察发现：react官方脚手架，默认没有配置编译less
+		(1).安装：yarn add less less-loader
+		(2).修改：config-overrides.js:
+					const { override, fixBabelImports,addLessLoader } = require('customize-cra');
+					module.exports = override(
+						fixBabelImports('import', {
+							libraryName: 'antd',
+							libraryDirectory: 'es',
+							style: true,
+						}),
+						addLessLoader({
+							lessOptions:{
+									javascriptEnabled: true,
+									modifyVars: { '@primary-color': 'orange' }
+							}
+						}),
+					);
