@@ -3,7 +3,7 @@
 //引入createStore，用于创建store对象
 import {createStore,applyMiddleware} from 'redux'
 //引入为store服务的reducer
-import countReducer from './reducers/count'
+import countReducer from './count_reducer'
 //redux-thunk
 import thunk from 'redux-thunk'
 

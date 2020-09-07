@@ -1,7 +1,11 @@
-//该组件是Count的UI组件，该组件中不能使用任何redux相关的API
 import React, { Component } from 'react'
+//引入action
+import {incrementAction,decrementAction} from '../redux/count_action'
+//引入connect，用于创建容器组件
+import {connect} from 'react-redux'
 
-export default class Count extends Component {
+//定义一个UI组件
+class Count extends Component {
 
 	increment = ()=>{
 		//1.获取用户选择的数字
@@ -46,3 +50,27 @@ export default class Count extends Component {
 		)
 	}
 }
+
+//创建并暴露一个容器组件
+/* 
+	关connect函数你要知道的：
+		1.connect是一个函数，它调用的返回值依然是一个函数
+		2.connect的作用是：连接UI与redux
+		3.connect的语法是：connect(映射状态的函数，映射操作状态的函数/对象)(UI组件)
+		4.connect是高阶函数，同时应用了函数柯里化技术
+*/
+export default connect(
+	state => ({sum:state}),
+	//第二个参数为对象（最终会被翻译成函数的形式）
+	{
+		jia:incrementAction,
+		jian:decrementAction
+	}
+	//第二个参数为函数
+	/* dispatch => (
+		{
+			jia:(number)=> dispatch(incrementAction(number)),
+			jian:(number)=> dispatch(decrementAction(number))
+		}
+	) */
+)(Count)
