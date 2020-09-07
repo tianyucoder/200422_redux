@@ -1,15 +1,22 @@
 import React, { Component } from 'react'
-import Count from './container/Count'
-import Person from './container/Person'
+import {Button,Switch,message} from 'antd'
+import 'antd/dist/antd.css'
 
 export default class App extends Component {
 
+	demo = ()=>{
+		message.warning('操作成功！')
+	}
+	
 	render() {
 		return (
 			<div>
-				<Count/>
-				<hr/>
-				<Person/>
+				App....
+				<button>点我</button>
+				<Button onClick={this.demo}>点我</Button>
+				<Button onClick={this.demo} type="primary">点我</Button>
+				<Button onClick={this.demo} type="danger">点我</Button>
+				<Switch defaultChecked/>
 			</div>
 		)
 	}
