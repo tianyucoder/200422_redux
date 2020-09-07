@@ -1,23 +1,29 @@
 import React, { Component } from 'react'
+//引入connect，用于创建容器组件，同时连接UI组件
 import {connect} from 'react-redux'
+//引入action，用于操作redux中的状态
 import {increment,decrement,incrementAsync} from '../../redux/actions/count'
 
+//定义好一个Count组件（UI组件）
 class Count extends Component {
-	
+	//加
 	increment = ()=>{
 		const {selectedNumber} = this.refs
 		this.props.increment(selectedNumber.value*1)
 	}
+	//减
 	decrement = ()=>{
 		const {selectedNumber} = this.refs
 		this.props.decrement(selectedNumber.value*1)
 	}
+	//奇数加
 	incrementIfodd = ()=>{
 		const {selectedNumber} = this.refs
 		if(this.props.sum % 2 !== 0 ){
 			this.props.increment(selectedNumber.value*1)
 		}
 	}
+	//异步加
 	incrementAsync = ()=>{
 		const {selectedNumber} = this.refs
 		this.props.incrementAsync(selectedNumber.value*1)
@@ -43,10 +49,10 @@ class Count extends Component {
 }
 
 export default connect(
-	(state)=>({
+	(state)=>({ //映射状态，注意state是总状态对象
 		sum:state.sum,
 		peronCount:state.persons.length
-	}),//映射状态
+	}),
 	{increment,decrement,incrementAsync}//映射操作状态的方法
 )(Count)
 
